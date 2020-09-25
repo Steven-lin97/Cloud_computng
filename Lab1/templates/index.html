@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+<head>
+  <title>Lab 1 Application</title>
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+  <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <h1>Lab 1 Application</h1>
+
+  <div id="events"></div>
+
+  <div style="text-align:left;" id="add_event">
+    <button type="button" onclick="add_event()">Add</button>
+  </div>
+  <div style="text-align:left;" id="del_event">
+    <button type="button" onclick="del_event()">Delete</button>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Lab 2 Login</title>
+    <script src="{{ url_for('static', filename='login.js') }}"></script>
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<h1>Login</h1>
+
+<div></div>
+
+<div style="text-align:left;" id="add_event">
+    <label for="uname">User name:</label>
+    <input type="text" id="uname" name="uname"><br><br>
+    <label for="passwd">Password:</label>
+    <input type="password" id="passwd" name="passwd"><br><br>
+</div>
+<div style="text-align:left;" id="del_event">
+    <button type="button" onclick="login()">Log in</button>
+    <button type="button" onclick="signup()">Sign up</button>
+</div>
+
+</body>
+</html>

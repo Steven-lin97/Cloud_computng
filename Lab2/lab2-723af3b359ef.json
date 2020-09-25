@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "durable-tracer-290220",
+  "private_key_id": "723af3b359ef1cea9a3c15d6cc220764035627bf",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDJZPEO0Lm3cDPP\nP4L/7cAHeUIxRfcMs5Notey7ZuJe5Ld7dMJO2BRzirvUTBzJ8nAjthkEjrDj25vE\nsSyR/ZbOt8Ao+MesxhAz/zdz7s5Ph5aqiZ1mIk/fsJ+w6JL7N1szb+hmWkTF4mP8\n0LR6bG6nw27b8QpcexKWKK+LUt3UhsbQDMXSbMTNR28KnXGty0vJkgXuNG452Y0z\nrD++7t2dXIOEZD0+6mOoYfe7cRofOlkCMyDRw8T1aGctJZauvOia1yur/PVtQYM5\nB/ANw385zRuh1SxI8CO1TLrsU+j4HZlXpnLyXj3aDO/deutN6A3gavdtyHweu+Cg\n2VekxUGJAgMBAAECggEAAio4HykmPe8SV4F+xoKHRG1MxVvTrorFpGQEQfV2rH93\n63dTWWagPae5oiwZSSB2jSO5fB+Ojjx/nasr5/vaYal/AtG9z8EnTm/JaFEiXZ9/\nAqFNFFp9ElIDPXMalWHAdLqYvHTu9VOcMI0Ly58bx2jl6a5bJqhaCEwyquQ+pziw\nwtCf5B/VUKYmovbohd603nAcKP2u5o+xz01DumHN2l3Ap3IdAZepGbgTWk2B2NtI\nSHIfHM8yQavwFMokXh/0qsvuCUDRm6/ecCw4pMwILR+nx9EsdcVfxoMn+AcCctb8\nc9WrQZ8EH0leHuIrXQbYPVVBiE+oHHeL62MlzTpvQQKBgQD/z/NjJHXWxZyN2z5O\nlGhdYJciexMdnSYEs9bAHo5MGDMaIrBQ0B71gJuYYFROcyAE3V9hjwJXj5WWXWmj\nyWuOFV92o2Q1GBAGOeV/RSivBKgoj3aWN+yGme9/rbQ0q5NVePgbSjPUL7JTj4wB\nLIBq0kQ1MnwiC+Uo4QQE9e3BGQKBgQDJisUBv7BGVlnslusK1VnxFTqgMCTObxAP\nUGLXgsANMEZK965PA+adEy4XRP9OuDqeXy8dlSFV0349A/rBj5/rPGSwycjzBZ8u\n2uujGtiY6uUHnNVPaNSKEh92xaBwlWvRG4C0k4kqgmLR/j9+rlHrTZABb1/SIAty\n6cdyKQhh8QKBgGKRGdLFpbIPincOVz+n516zbQiYK5Fpj9CYCtMT8vhXCrmzTASX\nbJZj65AW7eUcbuXw9mN82wYqCRVbAO1fGtYwXgw0gNQEZYhAnrEfUMG/JZwbSzIu\ncjCa97FWmO0Cf06bwd2iBb5ocmnIEcYSA5klU6q7vSDRPIc3zHis2eNhAoGABkLd\nY/SEkWrVWFhH7Qo7xRWXwKo+OnuQ0Cj7KR7SwJYjWOjg7Wt9mpuh7u8hz1xB1fG3\nEQA1DOmJHnQlMiY4HaK+rg9WwtYF3/rFH0gSOo3xl47zwYfMMo3llFcHaPf7ZX+p\nO/Lpa/yo/UUcy962hMzgEGtZWrnMIUHKBG3p6MECgYBjalTS0VLC9WZx/XDn28PD\nhwkKmnrGyUp4kW1D2IZxqq/pJZSJu1bjTeJkKu+NYVLJ/ZBhAlAxKBvzwumJ01I5\nGuu8rUJcHjfe9qygkGqtP54s71o4EUf4T7wStLSN4YMC6256wWaM8tKUYCnQs/AE\n3NKk0E9fQBIxqIJn8g0OqQ==\n-----END PRIVATE KEY-----\n",
+  "client_email": "datastore@durable-tracer-290220.iam.gserviceaccount.com",
+  "client_id": "109125644376020333415",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/datastore%40durable-tracer-290220.iam.gserviceaccount.com"
+}
