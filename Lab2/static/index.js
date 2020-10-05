@@ -27,7 +27,6 @@ function reqJSON(method, url, data) {
 function getEvents() {
     reqJSON('GET', '/events')
         .then(({status, data}) => {
-            print(data)
             events = data
             let html = '<table><tr><th>ID</th><th>Name</th><th>Date</th><th>ETA</th></tr>';
             let ID = 1;
