@@ -1,18 +1,16 @@
+import calendar
 import json
 import random
 import string
+import uuid
 from datetime import datetime, timedelta
 from flask import *
 from google.cloud import datastore
-# import libs.bcrypt as bcrypt
 import bcrypt
 import pytz
 
 app = Flask(__name__)
 DS = datastore.Client()
-length = 10
-# salt = b'$2b$10$1z3/gAC13A9.6aC0sRIqM.'
-salt = bcrypt.gensalt(10)
 
 
 def get_random_string(length):
@@ -90,14 +88,11 @@ def events2json(events):
         event['date'] = event['date'].strftime("%m/%d/%Y")
         event['ETA'] = ''
         diff = int(timestamp - current)
-        if diff < 86400:
-            event['ETA'] = ':' + str(diff % 60) + ' left.'
-            diff = diff // 60
-            event['ETA'] = ':' + str(diff % 60) + event['ETA']
-            diff = diff // 60
-            event['ETA'] = str(diff) + event['ETA']
-        else:
-            event['ETA'] = str(diff // 86400) + ' days later.'
+        event['ETA'] = ':' + str(diff % 60) + ' left.'
+        diff = diff // 60
+        event['ETA'] = ':' + str(diff % 60) + event['ETA']
+        diff = diff // 60
+        event['ETA'] = str(diff) + event['ETA']
     return json.dumps(events)
 
 
@@ -143,31 +138,14 @@ def _create_session(parent_id):
     """
     entity = datastore.Entity(key=DS.key('Lab2-session', parent=DS.key('Lab2-user', parent_id)))
     entity.update({
-        'token': get_random_string(length),
-        'expire': datetime.now() + timedelta(hours=9)
+        'token': str(uuid.uuid4()),
+        'expire': datetime.now() + timedelta(hours=1)
     })
     DS.put(entity)
     return entity['token']
 
 
-def _verify_user(uname, passwd):
-    """Check if the user name and password matches.
-
-    @param uname: User name.
-    @param passwd: Password.
-    @return: The id of the user if matches.
-    """
-    query = DS.query(kind='Lab2-user')
-    query.add_filter('uname', '=', uname)
-    query.add_filter('passwd', '=', passwd)
-
-    events = query.fetch()
-    for event in events:
-        return event.id
-    return None
-
-
-def _search_user(uname):
+def _search_user(uname, passwd):
     """ Search the given user.
 
     @param uname: User name.
@@ -177,7 +155,8 @@ def _search_user(uname):
     query.add_filter('uname', '=', uname)
     events = query.fetch()
     for event in events:
-        return True
+        if bcrypt.checkpw(passwd.encode('utf-8'), event['passwd']):
+            return event.id
     return False
 
 
@@ -188,12 +167,12 @@ def _add_user(uname, passwd):
     @param passwd: Password.
     @return: The id of new user.
     """
-    if _search_user(uname):
+    if _search_user(uname, passwd):
         return None
     entity = datastore.Entity(key=DS.key('Lab2-user'))
     entity.update({
         'uname': uname,
-        'passwd': passwd
+        'passwd': bcrypt.hashpw(passwd.encode('utf-8'), bcrypt.gensalt())
     })
     DS.put(entity)
     return entity.id
@@ -206,13 +185,10 @@ def root():
     :return: Render template of web page.
     """
     token = request.cookies.get('token')
-    if not token:
-        res = redirect('/login', code=401)
+    if not token or not _search_session(token):
+        res = redirect('/login')
     else:
-        if _search_session(token):
-            res = make_response(render_template('index.html'))
-        else:
-            res = redirect('/login', code=401)
+        res = make_response(render_template('index.html'))
 
     return res
 
@@ -232,8 +208,8 @@ def login_page():
         if not data['passwd']:
             abort(make_response('Password cannot be empty!', 400))
         uname = data['uname']
-        passwd = bcrypt.hashpw(data['passwd'].encode('utf-8'), salt)
-        user_id = _verify_user(uname, passwd)
+        # passwd = bcrypt.hashpw(data['passwd'].encode('utf-8'), bcrypt.gensalt())
+        user_id = _search_user(uname, data['passwd'])
         if user_id:
             token = _create_session(user_id)
             res = make_response('/')
@@ -255,7 +231,7 @@ def sign_up():
     if not data['passwd']:
         abort(make_response('Password cannot be empty!', 400))
     uname = data['uname']
-    passwd = bcrypt.hashpw(data['passwd'].encode('utf-8'), salt)
+    passwd = data['passwd']
     user_id = _add_user(uname, passwd)
     if user_id:
         token = _create_session(user_id)
@@ -289,6 +265,7 @@ def add_event():
 
     :return: Status Information.
     """
+    new_ID = ''
     token = request.cookies.get('token')
     parent_id = _search_session(token)
     if not parent_id:
@@ -311,8 +288,18 @@ def add_event():
         if len(date) == 3:
             event['date'] = datetime(date[0], date[1], date[2])
         if len(date) == 2:
-            temp = datetime(2020, date[0], date[1])
-            event['date'] = temp if temp > datetime.now() else datetime(2021, date[0], date[1])
+            result = None
+            cur_time = datetime.now()
+            for year in range(cur_time.year, cur_time.year + 8):
+                if date[1] not in calendar.monthrange(year, date[0]):
+                    continue
+                temp = datetime(year, date[0], date[1])
+                if temp > cur_time:
+                    result = temp
+                    break
+            if not result:
+                abort(make_response('Date does not exist!'))
+            event['date'] = result
 
         token = request.cookies.get('token')
         parent_id = _search_session(token)
