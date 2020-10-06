@@ -1,7 +1,8 @@
 import json
 from datetime import datetime
-from flask import Flask, render_template, request
+from flask import *
 from google.cloud import datastore
+import calendar
 
 app = Flask(__name__)
 DS = datastore.Client()
@@ -68,14 +69,11 @@ def events2json(events):
         event['date'] = event['date'].strftime("%m/%d/%Y")
         event['ETA'] = ''
         diff = int(timestamp - current)
-        if diff < 86400:
-            event['ETA'] = ':' + str(diff % 60) + ' left.'
-            diff = diff // 60
-            event['ETA'] = ':' + str(diff % 60) + event['ETA']
-            diff = diff // 60
-            event['ETA'] = str(diff) + event['ETA']
-        else:
-            event['ETA'] = str(diff // 86400) + ' days later.'
+        event['ETA'] = ':' + str(diff % 60) + ' left.'
+        diff = diff // 60
+        event['ETA'] = ':' + str(diff % 60) + event['ETA']
+        diff = diff // 60
+        event['ETA'] = str(diff) + event['ETA']
     return json.dumps(events)
 
 
@@ -108,28 +106,35 @@ def add_event():
     """
     event = json.loads(request.data)
     if not event['name']:
-        return json.dumps({'text': 'ERROR: Name cannot be empty!'})
+        abort(make_response('Name cannot be empty!', 400))
     if not event['date']:
-        return json.dumps({'text': 'ERROR: Date cannot be empty!'})
+        abort(make_response('Date cannot be empty!', 400))
     date = event['date'].split('/')
     for i in range(len(date)):
         try:
             date[i] = int(date[i])
         except ValueError:
-            return json.dumps({'text': 'ERROR: Date format is wrong!'})
+            abort(make_response('Date format is wrong!', 400))
 
     if len(date) != 2 and len(date) != 3:
-        return json.dumps({'text': 'ERROR: Date format is wrong!'})
+        abort(make_response('Date format is wrong!', 400))
     if len(date) == 3:
         event['date'] = datetime(date[0], date[1], date[2])
     if len(date) == 2:
-        temp = datetime(2020, date[0], date[1])
-        event['date'] = temp if temp > datetime.now() else datetime(2021, date[0], date[1])
+        result = None
+        cur_time = datetime.now()
+        for year in range(cur_time.year, cur_time.year + 8):
+            if date[1] not in calendar.monthrange(year, date[0]):
+                continue
+            temp = datetime(year, date[0], date[1])
+            if temp > cur_time:
+                result = temp
+                break
+        if not result:
+            abort(make_response('Date does not exist!'))
+        event['date'] = result
 
-    try:
-        new_ID = _add_event(event)
-    except ValueError as err:
-        return json.dumps({'text': 'ERROR: ' + str(err)})
+    new_ID = _add_event(event)
 
     return json.dumps({'text': 'Success! The unique ID of the new event is ' + str(new_ID)})
 
@@ -141,10 +146,7 @@ def del_event(event_id):
     :param event_id: The unique ID of target event.
     :return: Status Infomation.
     """
-    try:
-        _del_event(event_id)
-    except ValueError as err:
-        return json.dumps({'text': 'ERROR: ' + str(err)})
+    _del_event(event_id)
 
     return json.dumps({'text': 'Success! Target event has been deleted!'})
 

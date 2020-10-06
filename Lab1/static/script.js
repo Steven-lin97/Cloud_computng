@@ -2,7 +2,7 @@
 
 let events = [];
 
-// let clock = self.setInterval(getEvents, 1000)
+let clock = self.setInterval(getEvents, 1000)
 
 function reqJSON(method, url, data) {
     return new Promise((resolve, reject) => {
@@ -67,5 +67,5 @@ function del_event() {
         });
 }
 
-document.addEventListener('DOMContentLoaded', getEvents);
+// document.addEventListener('DOMContentLoaded', getEvents);
   
