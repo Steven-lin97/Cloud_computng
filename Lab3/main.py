@@ -268,7 +268,7 @@ def main_page():
         user_id = _add_user(sub, email)
     _create_session(user_id, token)
     res = make_response(render_template('index.html'))
-    res.set_cookie('state', token)
+    res.set_cookie('session', token)
     return res
 
 
@@ -279,7 +279,7 @@ def send_events():
 
     :return: All entities in database in json form.
     """
-    token = request.cookies.get('state')
+    token = request.cookies.get('session')
     parent_id = _search_session(token)
     if not parent_id:
         abort(make_response('Session expired.', 401))
@@ -296,7 +296,7 @@ def add_event():
     :return: Status Information.
     """
     new_ID = ''
-    token = request.cookies.get('token')
+    token = request.cookies.get('session')
     parent_id = _search_session(token)
     if not parent_id:
         abort(make_response('Session expired.', 401))
@@ -331,7 +331,7 @@ def add_event():
                 abort(make_response('Date does not exist!'))
             event['date'] = result
 
-        token = request.cookies.get('token')
+        token = request.cookies.get('session')
         parent_id = _search_session(token)
         if not parent_id:
             abort(make_response('Session expired.', 401))
@@ -348,7 +348,7 @@ def del_event(event_id):
     :param event_id: The unique ID of target event.
     :return: Status Information.
     """
-    token = request.cookies.get('token')
+    token = request.cookies.get('session')
     parent_id = _search_session(token)
     if not parent_id:
         return make_response('Session expired.', 401)
@@ -364,7 +364,7 @@ def logout():
 
     @return: Redirect address.
     """
-    token = request.cookies.get('token')
+    token = request.cookies.get('session')
     _del_session(token)
     return json.dumps({'text': '/login'})
 

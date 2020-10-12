@@ -188,7 +188,7 @@ def root():
     if not token or not _search_session(token):
         res = redirect('/login')
     else:
-        res = make_response(render_template('index.html'))
+        res = make_response(send_from_directory('templates/', 'index.html'))
 
     return res
 
@@ -200,7 +200,7 @@ def login_page():
     @return: Redirect address.
     """
     if request.method == 'GET':
-        res = make_response(render_template('login.html'))
+        res = make_response(send_from_directory('templates/', 'login.html'))
     if request.method == 'POST':
         data = json.loads(request.data)
         if not data['uname']:

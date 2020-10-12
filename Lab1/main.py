@@ -83,7 +83,7 @@ def root():
 
     :return: Render template of web page.
     """
-    return render_template('index.html')
+    return send_from_directory('templates/', 'index.html')
 
 
 @app.route('/events')
