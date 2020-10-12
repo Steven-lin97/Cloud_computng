@@ -22,22 +22,6 @@ function reqJSON(method, url, data) {
     });
 }
 
-// function login() {
-//     uname = document.getElementById('uname').value;
-//     passwd = document.getElementById('passwd').value;
-//     reqJSON('POST', '/login', JSON.stringify({uname: uname, passwd: passwd})).then(({status, data}) => {
-//         window.location.href = data
-//     })
-//         .catch(({status, data}) => {
-//             console.log('reject')
-//             // if (status === 302)
-//             //     window.location.href='/'
-//             // cookie = data
-//             // Display an error.
-//             alert('ERROR: ' + data);
-//         });
-// }
-
 function login() {
     reqJSON('GET', '/login_google').then(({status, data}) => {
             window.location.href = data;
